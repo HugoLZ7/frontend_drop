@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 
-const TOKEN_COOKIE = "token";
+export const TOKEN_COOKIE = "token";
 const ONE_DAY_IN_SECONDS = 60 * 60 * 24;
 
 export async function createSession(token: string) {
