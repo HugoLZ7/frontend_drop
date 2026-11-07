@@ -32,3 +32,32 @@ export async function getAreaCodes(): Promise<AreaCode[]> {
     return FALLBACK_AREA_CODES;
   }
 }
+
+const DEPARTMENTS_URL =
+  "https://juanmedina100.github.io/departamentos-distritos-municipios-el-salvador/departamentos-distritos-municipios-sv.json";
+
+export type Department = { name: string; municipalities: string[] };
+
+type ExternalDepartment = {
+  nombre: string;
+  municipios: { nombre: string }[];
+};
+
+export async function getDepartments(): Promise<Department[]> {
+  try {
+    const response = await fetch(DEPARTMENTS_URL, {
+      next: { revalidate: 86400 },
+    });
+    if (!response.ok) return [];
+
+    const json: { departamentos: ExternalDepartment[] } = await response.json();
+    return json.departamentos.map((department) => ({
+      name: department.nombre,
+      municipalities: department.municipios.map(
+        (municipality) => municipality.nombre,
+      ),
+    }));
+  } catch {
+    return [];
+  }
+}
