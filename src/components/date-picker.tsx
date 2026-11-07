@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import type { Matcher } from "react-day-picker";
 import { es } from "react-day-picker/locale";
@@ -20,6 +20,7 @@ type DatePickerProps = {
   disabled?: Matcher | Matcher[];
   startMonth?: Date;
   endMonth?: Date;
+  defaultValue?: string;
 };
 
 export function DatePicker({
@@ -29,8 +30,11 @@ export function DatePicker({
   disabled,
   startMonth,
   endMonth,
+  defaultValue,
 }: DatePickerProps) {
-  const [date, setDate] = useState<Date>();
+  const [date, setDate] = useState<Date | undefined>(
+    defaultValue ? parseISO(defaultValue) : undefined,
+  );
   const [open, setOpen] = useState(false);
 
   return (
