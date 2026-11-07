@@ -1,3 +1,4 @@
+import { DownloadOrdersButton } from "@/components/orders/download-orders-button";
 import { OrdersFilter } from "@/components/orders/orders-filter";
 import { OrdersPagination } from "@/components/orders/orders-pagination";
 import { OrdersTable } from "@/components/orders/orders-table";
@@ -34,7 +35,10 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
         </p>
       )}
 
-      <OrdersFilter startDate={startDate} endDate={endDate} />
+      <div className="flex flex-wrap items-center gap-3">
+        <OrdersFilter startDate={startDate} endDate={endDate} />
+        <DownloadOrdersButton orders={result?.data ?? []} />
+      </div>
 
       {result ? (
         <>
