@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { createSession } from "@/lib/session";
+import { createSession, deleteSession } from "@/lib/session";
 
 export type LoginState = { error?: string } | undefined;
 
@@ -73,4 +73,9 @@ export async function register(
   }
 
   redirect("/login?registered=1");
+}
+
+export async function logout() {
+  await deleteSession();
+  redirect("/login");
 }
