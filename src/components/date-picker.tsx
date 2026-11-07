@@ -70,7 +70,7 @@ export function DatePicker({
             disabled={disabled}
             startMonth={startMonth}
             endMonth={endMonth}
-            defaultMonth={date ?? endMonth}
+            defaultMonth={date}
           />
         </PopoverContent>
       </Popover>
