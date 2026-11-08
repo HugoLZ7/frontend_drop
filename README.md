@@ -2,6 +2,8 @@
 
 Aplicación web desarrollada como parte de la prueba técnica de Boxful. Permite registrarse, iniciar sesión, crear órdenes de envío con varios paquetes y consultar el historial de órdenes.
 
+Incluye el punto extra de la prueba: las órdenes pueden marcarse con cobro contra entrega (COD) y el historial muestra el estado de cada orden, su liquidación y el monto a liquidar acumulado del comercio.
+
 Consume la API del repositorio [backend_drop](https://github.com/HugoLZ7/backend_drop), que debe estar en ejecución.
 
 ## Tecnologías
@@ -69,8 +71,10 @@ La variable solo se usa en el servidor de Next.js, por lo que no se expone al na
 |---|---|---|
 | `/login` | Pública | Inicio de sesión |
 | `/register` | Pública | Registro de usuario con confirmación del número de teléfono |
-| `/orders/new` | Privada | Creación de una orden en dos pasos: datos de entrega y paquetes |
-| `/orders` | Privada | Historial de órdenes con filtro por fechas, paginación y descarga en CSV |
+| `/orders/new` | Privada | Creación de una orden en dos pasos: datos de entrega (con cobro contra entrega opcional) y paquetes |
+| `/orders` | Privada | Historial de órdenes con tipo, estado y liquidación de cada orden, filtro por fechas, paginación y descarga en CSV |
+
+En todas las vistas privadas, el encabezado muestra el **monto a liquidar** del comercio: la suma de las liquidaciones de sus órdenes, calculada por el backend. Puede ser negativo cuando hay envíos pendientes de pago.
 
 ## Estructura del proyecto
 
@@ -93,6 +97,7 @@ src/
 - **Protección de rutas con `proxy.ts`.** Las rutas privadas redirigen al inicio de sesión si no hay sesión, y las vistas de inicio de sesión y registro redirigen al panel si ya existe una.
 - **Catálogos desde APIs externas.** Los códigos de área de Centroamérica se obtienen de [CountriesNow](https://countriesnow.space), y los departamentos y municipios de El Salvador de [este conjunto de datos](https://github.com/juanmedina100/departamentos-distritos-municipios-el-salvador). Las respuestas se guardan en caché durante un día.
 - **Filtros en la URL.** Las fechas y la página del historial viajan como parámetros de la URL, por lo que una búsqueda se puede recargar o compartir.
+- **Cálculos en el backend.** El frontend no calcula costos, comisiones ni liquidaciones: muestra los valores que devuelve la API, para que las reglas de negocio existan en un solo lugar.
 
 ## Mejoras pendientes
 
