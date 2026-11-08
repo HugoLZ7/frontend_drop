@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { apiFetch } from "@/lib/api";
 
@@ -24,6 +25,8 @@ export type OrderDetails = {
   city: string;
   reference?: string;
   indications?: string;
+  isCod: boolean;
+  expectedAmount?: number;
 };
 
 export type CreateOrderInput = OrderDetails & { packages: PackageInput[] };
@@ -50,5 +53,6 @@ export async function createOrder(
   }
 
   const order: { orderNumber: string } = await response.json();
+  revalidatePath("/", "layout");
   redirect(`/orders?created=${order.orderNumber}`);
 }

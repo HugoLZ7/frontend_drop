@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 import type { OrderDetails } from "@/actions/orders";
 import { DatePicker } from "@/components/date-picker";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -28,6 +29,7 @@ export function OrderDetailsStep({
   onNext,
 }: OrderDetailsStepProps) {
   const [department, setDepartment] = useState<string | null>(null);
+  const [isCod, setIsCod] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const areaCodeItems = areaCodes.map((areaCode) => ({
@@ -51,6 +53,11 @@ export function OrderDetailsStep({
       setError("Selecciona el departamento y el municipio");
       return;
     }
+    const expectedAmount = Number(value("expectedAmount"));
+    if (isCod && !(expectedAmount > 0)) {
+      setError("Ingresa el monto a cobrar contra entrega");
+      return;
+    }
     setError(null);
 
     onNext({
@@ -66,6 +73,8 @@ export function OrderDetailsStep({
       city: value("city"),
       reference: value("reference") || undefined,
       indications: value("indications") || undefined,
+      isCod,
+      expectedAmount: isCod ? expectedAmount : undefined,
     });
   }
 
@@ -228,6 +237,32 @@ export function OrderDetailsStep({
             maxLength={500}
           />
         </div>
+
+        <div className="flex items-center gap-3 md:col-span-2 md:min-h-9">
+          <Checkbox
+            id="isCod"
+            checked={isCod}
+            onCheckedChange={(checked) => setIsCod(checked)}
+          />
+          <Label htmlFor="isCod">
+            Cobrar al destinatario (pago contra entrega)
+          </Label>
+        </div>
+
+        {isCod && (
+          <div className="space-y-2">
+            <Label htmlFor="expectedAmount">Monto a cobrar (USD)</Label>
+            <Input
+              id="expectedAmount"
+              name="expectedAmount"
+              type="number"
+              min="0.01"
+              step="0.01"
+              placeholder="30.00"
+              required
+            />
+          </div>
+        )}
       </div>
 
       {error && <p className="text-sm text-destructive">{error}</p>}
