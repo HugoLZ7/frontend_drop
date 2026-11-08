@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Order } from "@/lib/orders";
+import { formatDate, type Order } from "@/lib/orders";
 
 export function OrdersTable({ orders }: { orders: Order[] }) {
   if (orders.length === 0) {
@@ -23,6 +23,7 @@ export function OrdersTable({ orders }: { orders: Order[] }) {
       <TableHeader>
         <TableRow className="bg-muted/60">
           <TableHead>No. de orden</TableHead>
+          <TableHead>Fecha de creación</TableHead>
           <TableHead>Nombre</TableHead>
           <TableHead>Apellidos</TableHead>
           <TableHead>Departamento</TableHead>
@@ -34,6 +35,7 @@ export function OrdersTable({ orders }: { orders: Order[] }) {
         {orders.map((order) => (
           <TableRow key={order.id}>
             <TableCell className="font-semibold">{order.orderNumber}</TableCell>
+            <TableCell>{formatDate(order.createdAt)}</TableCell>
             <TableCell>{order.clientName}</TableCell>
             <TableCell>{order.clientLastName}</TableCell>
             <TableCell>{order.department}</TableCell>

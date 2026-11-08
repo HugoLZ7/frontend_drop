@@ -2,10 +2,11 @@
 
 import { Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { Order } from "@/lib/orders";
+import { formatDate, type Order } from "@/lib/orders";
 
 const HEADERS = [
   "No. de orden",
+  "Fecha de creación",
   "Nombre",
   "Apellidos",
   "Correo",
@@ -24,6 +25,7 @@ function toCsvValue(value: string | number) {
 function buildCsv(orders: Order[]) {
   const rows = orders.map((order) => [
     order.orderNumber,
+    formatDate(order.createdAt),
     order.clientName,
     order.clientLastName,
     order.clientEmail,
@@ -31,7 +33,7 @@ function buildCsv(orders: Order[]) {
     order.department,
     order.city,
     order.deliveryAddress,
-    order.scheduledDate.slice(0, 10),
+    formatDate(order.scheduledDate),
     order.packages.length,
   ]);
 

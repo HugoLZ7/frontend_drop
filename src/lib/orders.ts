@@ -25,3 +25,12 @@ export type OrdersResponse = {
   data: Order[];
   meta: { total: number; page: number; limit: number; totalPages: number };
 };
+
+export function formatDate(value: string) {
+  return new Date(value).toLocaleDateString("es-SV", {
+    timeZone: "America/El_Salvador",
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+}
