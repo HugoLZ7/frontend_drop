@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { Logo } from "@/components/logo";
 
 export default function AuthLayout({
   children,
@@ -22,7 +21,6 @@ export default function AuthLayout({
         />
         <div className="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent" />
         <div className="relative space-y-3">
-          <Logo className="text-5xl" />
           <p className="max-w-sm text-lg">
             Envíos el mismo día en el Área Metropolitana y al día siguiente a
             nivel nacional.
