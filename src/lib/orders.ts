@@ -12,6 +12,12 @@ export type Order = {
   city: string;
   scheduledDate: string;
   createdAt: string;
+  isCod: boolean;
+  expectedAmount: number | null;
+  collectedAmount: number | null;
+  shippingCost: number;
+  status: "PENDING" | "DELIVERED";
+  settlement: number;
   packages: {
     length: number;
     height: number;
@@ -25,6 +31,18 @@ export type OrdersResponse = {
   data: Order[];
   meta: { total: number; page: number; limit: number; totalPages: number };
 };
+
+export const STATUS_LABELS: Record<Order["status"], string> = {
+  PENDING: "Pendiente",
+  DELIVERED: "Entregada",
+};
+
+export function formatMoney(value: number) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(value);
+}
 
 export function formatDate(value: string) {
   return new Date(value).toLocaleDateString("es-SV", {

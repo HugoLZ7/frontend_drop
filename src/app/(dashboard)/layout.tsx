@@ -10,17 +10,26 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const response = await apiFetch("/auth/me");
-  if (!response.ok) {
+  const [profileResponse, balanceResponse] = await Promise.all([
+    apiFetch("/auth/me"),
+    apiFetch("/orders/balance"),
+  ]);
+  if (!profileResponse.ok) {
     redirect("/logout");
   }
-  const profile: Profile = await response.json();
+  const profile: Profile = await profileResponse.json();
+  const balance: number | null = balanceResponse.ok
+    ? (await balanceResponse.json()).balance
+    : null;
 
   return (
     <div className="flex min-h-screen">
       <Sidebar />
-      <div className="flex flex-1 flex-col bg-slate-50">
-        <DashboardHeader userName={`${profile.name} ${profile.lastName}`} />
+      <div className="flex min-w-0 flex-1 flex-col bg-slate-50">
+        <DashboardHeader
+          userName={`${profile.name} ${profile.lastName}`}
+          balance={balance}
+        />
         <main className="flex-1 p-8">{children}</main>
       </div>
     </div>

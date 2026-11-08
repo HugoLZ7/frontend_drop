@@ -7,7 +7,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatDate, type Order } from "@/lib/orders";
+import {
+  formatDate,
+  formatMoney,
+  STATUS_LABELS,
+  type Order,
+} from "@/lib/orders";
+import { cn } from "@/lib/utils";
 
 export function OrdersTable({ orders }: { orders: Order[] }) {
   if (orders.length === 0) {
@@ -29,6 +35,9 @@ export function OrdersTable({ orders }: { orders: Order[] }) {
           <TableHead>Departamento</TableHead>
           <TableHead>Municipio</TableHead>
           <TableHead className="text-center">Paquetes en orden</TableHead>
+          <TableHead>Tipo</TableHead>
+          <TableHead>Estado</TableHead>
+          <TableHead className="text-right">Liquidación</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -44,6 +53,24 @@ export function OrdersTable({ orders }: { orders: Order[] }) {
               <Badge variant="outline" className="border-green-200 bg-green-50 text-green-700">
                 {order.packages.length}
               </Badge>
+            </TableCell>
+            <TableCell>
+              {order.isCod
+                ? `COD ${formatMoney(order.collectedAmount ?? order.expectedAmount ?? 0)}`
+                : "Estándar"}
+            </TableCell>
+            <TableCell>
+              <Badge variant={order.status === "DELIVERED" ? "default" : "outline"}>
+                {STATUS_LABELS[order.status]}
+              </Badge>
+            </TableCell>
+            <TableCell
+              className={cn(
+                "text-right font-medium",
+                order.settlement < 0 ? "text-destructive" : "text-green-700",
+              )}
+            >
+              {formatMoney(order.settlement)}
             </TableCell>
           </TableRow>
         ))}
