@@ -13,7 +13,7 @@ export default function AuthLayout({
       </main>
       <aside className="relative hidden flex-col justify-end gap-3 overflow-hidden bg-black p-12 text-white lg:flex">
         <Image
-          src="/login-image.jpg"
+          src="/login-cover.jpg"
           alt=""
           fill
           priority
